@@ -127,15 +127,21 @@ class AirCargoProblem(Problem):
 
     def actions(self, state: str) -> list:
         """ Return the actions that can be executed in the given state.
-
         :param state: str
             state represented as T/F string of mapped fluents (state variables)
             e.g. 'FTTTFF'
         :return: list of Action objects
         """
-        # TODO implement
+
         possible_actions = []
+        fluent_state = decode_state(state, self.state_map)
+        for action in self.actions_list:
+            if all(precond_pos in fluent_state.pos for precond_pos in action.precond_pos) and \
+                    all(precond_neg in fluent_state.neg for precond_neg in action.precond_neg):
+                possible_actions.append(action)
+
         return possible_actions
+
 
     def result(self, state: str, action: Action):
         """ Return the state that results from executing the given
@@ -148,6 +154,19 @@ class AirCargoProblem(Problem):
         """
         # TODO implement
         new_state = FluentState([], [])
+        old_state = decode_state(state, self.state_map)
+        for fluent in old_state.pos:
+            if fluent not in action.effect_rem:
+                new_state.pos.append(fluent)
+        for fluent in action.effect_add:
+            if fluent not in new_state.pos:
+                new_state.pos.append(fluent)
+        for fluent in old_state.neg:
+            if fluent not in action.effect_add:
+                new_state.neg.append(fluent)
+        for fluent in action.effect_rem:
+            if fluent not in new_state.neg:
+                new_state.neg.append(fluent)
         return encode_state(new_state, self.state_map)
 
     def goal_test(self, state: str) -> bool:
@@ -191,8 +210,15 @@ class AirCargoProblem(Problem):
         count = 0
         return count
 
-
 def air_cargo_p1() -> AirCargoProblem:
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) 
+        ∧ At(P1, SFO) ∧ At(P2, JFK) 
+        ∧ Cargo(C1) ∧ Cargo(C2) 
+        ∧ Plane(P1) ∧ Plane(P2)
+        ∧ Airport(JFK) ∧ Airport(SFO))
+    Goal(At(C1, JFK) ∧ At(C2, SFO))
+    """
     cargos = ['C1', 'C2']
     planes = ['P1', 'P2']
     airports = ['JFK', 'SFO']
@@ -216,12 +242,76 @@ def air_cargo_p1() -> AirCargoProblem:
             ]
     return AirCargoProblem(cargos, planes, airports, init, goal)
 
-
 def air_cargo_p2() -> AirCargoProblem:
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) 
+        ∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) 
+        ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3)
+        ∧ Plane(P1) ∧ Plane(P2) ∧ Plane(P3)
+        ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL))
+    Goal(At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO))
+    """
     # TODO implement Problem 2 definition
-    pass
+    cargos = ['C1', 'C2', 'C3']
+    planes = ['P1', 'P2', 'P3']
+    airports = ['SFO', 'JFK', 'ATL']
 
+    _at = {
+        'C1' : 'SFO',
+        'C2' : 'JFK',
+        'C3' : 'ATL',
+        'P1' : 'SFO',
+        'P2' : 'JFK',
+        'P3' : 'ATL'
+    }
+
+    pos = [expr('At({}, {})'.format(obj, airport)) for obj, airport in _at.items() 
+           ]
+
+    
+    neg = [expr('At({}, {})'.format(obj, airport)) for obj in _at for airport in airports if _at[obj] !=  airport] \
+           + \
+          [expr('In({}, {})'.format(cargo, plane)) for cargo in cargos for plane in planes]
+    
+    init = FluentState(pos, neg)
+    goal = [expr('At(C1, JFK)'),
+            expr('At(C2, SFO)'),
+            expr('At(C3, SFO)'),
+            ]
+    return AirCargoProblem(cargos, planes, airports, init, goal)
 
 def air_cargo_p3() -> AirCargoProblem:
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
+        ∧ At(P1, SFO) ∧ At(P2, JFK) 
+        ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
+        ∧ Plane(P1) ∧ Plane(P2)
+        ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
+    Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
+    """
     # TODO implement Problem 3 definition
-    pass
+    cargos = ['C1', 'C2', 'C3','C4']
+    planes = ['P1', 'P2']
+    airports = ['JFK', 'SFO', 'ATL', 'ORD']
+
+    _at = {
+        'C1' : 'SFO',
+        'C2' : 'JFK',
+        'C3' : 'ATL',
+        'C4' : 'ORD',
+        'P1' : 'SFO',
+        'P2' : 'JFK',
+    }
+
+    pos = [expr('At({}, {})'.format(obj, airport)) for obj, airport in _at.items() 
+           ]
+    neg = [expr('At({}, {})'.format(obj, airport)) for obj in _at for airport in airports if _at[obj] !=  airport] \
+           + \
+          [expr('In({}, {})'.format(cargo, plane)) for cargo in cargos for plane in planes]
+    init = FluentState(pos, neg)
+    goal = [expr('At(C1, JFK)'),
+            expr('At(C3, JFK)'),
+            expr('At(C2, SFO)'),
+            expr('At(C4, SFO)'),
+            ]
+    return AirCargoProblem(cargos, planes, airports, init, goal)
