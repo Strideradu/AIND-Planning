@@ -127,19 +127,26 @@ class AirCargoProblem(Problem):
 
     def actions(self, state: str) -> list:
         """ Return the actions that can be executed in the given state.
+
         :param state: str
             state represented as T/F string of mapped fluents (state variables)
             e.g. 'FTTTFF'
         :return: list of Action objects
         """
-
+        # TODO implement
         possible_actions = []
-        fluent_state = decode_state(state, self.state_map)
+        kb = PropKB()
+        kb.tell(decode_state(state, self.state_map).pos_sentence())
         for action in self.actions_list:
-            if all(precond_pos in fluent_state.pos for precond_pos in action.precond_pos) and \
-                    all(precond_neg in fluent_state.neg for precond_neg in action.precond_neg):
+            is_possible = True
+            for clause in action.precond_pos:
+                if clause not in kb.clauses:
+                    is_possible = False
+            for clause in action.precond_neg:
+                if clause in kb.clauses:
+                    is_possible = False
+            if is_possible:
                 possible_actions.append(action)
-
         return possible_actions
 
 
@@ -208,6 +215,11 @@ class AirCargoProblem(Problem):
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
         count = 0
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        for clause in self.goal:
+            if clause not in kb.clauses:
+                count += 1
         return count
 
 def air_cargo_p1() -> AirCargoProblem:
