@@ -1,0 +1,135 @@
+\documentclass[]{article}
+\usepackage[top=1.5in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+%opening
+\title{Heuristic Analysis}
+\author{Nan Du}
+
+\begin{document}
+
+\maketitle
+\section{Air Cargo Problem 1}
+\subsection*{Problem:}
+\textbf{Init}(At(C1, SFO) $ \wedge $ At(C2, JFK) 
+$ \wedge $ At(P1, SFO) $ \wedge $ At(P2, JFK) 
+$ \wedge $ Cargo(C1) $ \wedge $ Cargo(C2) 
+$ \wedge  $Plane(P1) $ \wedge $ Plane(P2)
+$ \wedge $ Airport(JFK) $ \wedge $ Airport(SFO))\\
+\textbf{Goal}(At(C1, JFK) $ \wedge $ At(C2, SFO))
+\subsection*{Optimal Solution:}
+Load(C1, P1, SFO)\\
+Load(C2, P2, JFK)\\
+Fly(P2, JFK, SFO)\\
+Unload(C2, P2, SFO)\\
+Fly(P1, SFO, JFK)\\
+Unload(C1, P1, JFK)
+
+\subsection*{Comparison of different search methods}
+\begin{table}
+	\begin{center}
+		\begin{adjustbox}{width=1\textwidth}
+			\begin{tabular}{ c | c | c | c | c | c | c }
+				\hline
+				Search Strategy & Plan Length & Optimal & Expansians & Goal Tests & New Nodes & Running Time(s) \\ \hline
+				Breadth First Search & 6 & Yes &  43 & 56 & 180 & 0.022 \\ \hline
+				Depth First Tree Search & 20 & No &  21 & 22 & 84 & 0.011 \\ \hline
+				Uniform Cost Search & 6 & Yes &  55 & 57 & 224 & 0.028 \\ \hline
+				A* h\_1 & 6 & Yes &  55 & 57 & 224 & 0.028 \\ \hline
+				A* h\_ignore\_precondition & 6 & Yes &  41 & 43 & 170 & 0.027 \\ \hline
+				A* h\_pg\_levelsum & 6 & Yes &  11 & 13 & 50 & 0.561 \\
+				\hline
+			\end{tabular}
+		\end{adjustbox}
+	\end{center}
+\end{table}
+
+\section{Air Cargo Problem 2}
+\subsection*{Problem:}
+\textbf{Init}(At(C1, SFO) $ \wedge $ At(C2, JFK) $ \wedge $ At(C3, ATL) 
+$ \wedge $ At(P1, SFO) $ \wedge $ At(P2, JFK) $ \wedge $ At(P3, ATL) 
+$ \wedge $ Cargo(C1) $ \wedge $ Cargo(C2) $ \wedge $ Cargo(C3)
+$ \wedge $ Plane(P1) $ \wedge $ Plane(P2) $ \wedge $ Plane(P3)
+$ \wedge $ Airport(JFK) $ \wedge $ Airport(SFO) $ \wedge $ Airport(ATL))\\
+\textbf{Goal}(At(C1, JFK) $ \wedge $ At(C2, SFO) $ \wedge $ At(C3, SFO))
+\subsection*{Optimal Solution:}
+Load(C1, P1, SFO)\\
+Load(C2, P2, JFK)\\
+Load(C3, P3, ATL)\\
+Fly(P1, SFO, JFK)\\
+Unload(C1, P1, JFK)\\
+Fly(P2, JFK, SFO)\\
+Unload(C2, P2, SFO)\\
+Fly(P3, ATL, SFO)\\
+Unload(C3, P3, SFO)
+
+
+\subsection*{Comparison of different search methods}
+\begin{table}
+	\begin{center}
+		\begin{adjustbox}{width=1\textwidth}
+			\begin{tabular}{ c | c | c | c | c | c | c }
+				\hline
+				Search Strategy & Plan Length & Optimal & Expansians & Goal Tests & New Nodes & Running Time(s) \\ \hline
+				Breadth First Search & 9 & Yes &  3346 & 4612 & 30534 & 10.038 \\ \hline
+				Depth First Tree Search & 105 & No &  107 & 108 & 959 & 0.241 \\ \hline
+				Uniform Cost Search & 9 & Yes &  4853 & 4855 & 44041 & 8.900 \\ \hline
+				A* h\_1 & 9 & Yes &  4853 & 4855 & 44041 & 8.862 \\ \hline
+				A* h\_ignore\_precondition & 9 & Yes &  1450 & 1452 & 13303 & 3.148 \\ \hline
+				A* h\_pg\_levelsum & 9 & Yes &  86 & 88 & 842 & 96.064 \\
+				\hline
+			\end{tabular}
+		\end{adjustbox}
+	\end{center}
+\end{table}
+
+\section{Air Cargo Problem 3}
+\subsection*{Problem:}
+\textbf{Init}(At(C1, SFO) $ \wedge $ At(C2, JFK) $ \wedge $ At(C3, ATL) $ \wedge $ At(C4, ORD) 
+$ \wedge $ At(P1, SFO) $ \wedge $ At(P2, JFK) 
+$ \wedge $ Cargo(C1) $ \wedge $ Cargo(C2) $ \wedge $ Cargo(C3) $ \wedge $ Cargo(C4)
+$ \wedge $ Plane(P1) $ \wedge $ Plane(P2)
+$ \wedge $ Airport(JFK) $ \wedge $ Airport(SFO) $ \wedge $ Airport(ATL) $ \wedge $ Airport(ORD))\\
+\textbf{Goal}(At(C1, JFK) $ \wedge $ At(C3, JFK) $ \wedge $ At(C2, SFO) $ \wedge $ At(C4, SFO))
+\subsection*{Optimal Solution:}
+Load(C1, P1, SFO)\\
+Load(C2, P2, JFK)\\
+Fly(P2, JFK, ORD)\\
+Load(C4, P2, ORD)\\
+Fly(P1, SFO, ATL)\\
+Load(C3, P1, ATL)\\
+Fly(P1, ATL, JFK)\\
+Unload(C1, P1, JFK)\\
+Unload(C3, P1, JFK)\\
+Fly(P2, ORD, SFO)\\
+Unload(C2, P2, SFO)\\
+Unload(C4, P2, SFO)\\
+
+\subsection*{Comparison of different search methods}
+\begin{table}
+	\begin{center}
+		\begin{adjustbox}{width=1\textwidth}
+			\begin{tabular}{ c | c | c | c | c | c | c }
+				\hline
+				Search Strategy & Plan Length & Optimal & Expansians & Goal Tests & New Nodes & Running Time(s) \\ \hline
+				Breadth First Search & 12 & Yes &  14663 & 18098 & 129631 & 69.503 \\ \hline
+				Depth First Tree Search & 392 & No &  408 & 409 & 3364 & 1.177 \\ \hline
+				Uniform Cost Search & 12 & Yes &  18235 & 18237 & 159716 & 39.438 \\ \hline
+				A* h\_1 & 12 & Yes &  18235 & 18237 & 159716 & 33.875 \\ \hline
+				A* h\_ignore\_precondition & 12 & Yes &  5040 & 5042 & 44944 & 12.492 \\ \hline
+				A* h\_pg\_levelsum & 12 & Yes &  316 & 318 & 2912 & 574.142\\
+				\hline
+			\end{tabular}
+		\end{adjustbox}
+	\end{center}
+\end{table}
+
+
+\section{Analysis}
+For \textbf{uninformed search}, breadth first search and uniform cost search can return optimal solution. Depth First Tree search cannot return optimal solution, but using less time to finish. This is consistent with lectures as depth first search doesn't need expand at every level.
+
+For \textbf{Heuristic Search}, all three methods were able to return optimal solutions. And for A* using h\_1 heuristics and A* using ignored precondition for h heuristic, it achieve better time efficient than uninformed search. The A* with pg level sum heuristic, is much slower than other methods. This may because we need to go through all levels to find if a goal is achieved.
+
+In general, on problem 2 and 3, heuristics method is faster than uninformed methods. On problem 1, the performance is similar. This is because problem 1 is much simple than problem 2 and 3.
+
+\end{document}

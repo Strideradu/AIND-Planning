@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{bonet1999HSP}
+Blai Bonet and Hector Geffner.
+\newblock Planning as heuristic search: New results.
+\newblock In {\em European Conference on Planning}, pages 360--372. Springer,
+  1999.
+
+\bibitem{coles2012survey}
+Amanda Coles, Andrew Coles, Angel~Garc{\'\i}a Olaya, Sergio Jim{\'e}nez,
+  Carlos~Linares L{\'o}pez, Scott Sanner, and Sungwook Yoon.
+\newblock A survey of the seventh international planning competition.
+\newblock {\em AI Magazine}, 33(1):83--88, 2012.
+
+\bibitem{helmert2006fastdownward}
+Malte Helmert.
+\newblock The fast downward planning system.
+\newblock {\em Journal of Artificial Intelligence Research}, 26:191--246, 2006.
+
+\bibitem{hoffmann2001ff}
+J{\"o}rg Hoffmann and Bernhard Nebel.
+\newblock The ff planning system: Fast plan generation through heuristic
+  search.
+\newblock {\em Journal of Artificial Intelligence Research}, 14:253--302, 2001.
+
+\bibitem{richter2010lama}
+Silvia Richter and Matthias Westphal.
+\newblock The lama planner: Guiding cost-based anytime planning with landmarks.
+\newblock {\em Journal of Artificial Intelligence Research}, 39:127--177, 2010.
+
+\end{thebibliography}

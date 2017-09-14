@@ -1,0 +1,29 @@
+\documentclass[]{article}
+
+%opening
+\title{Research Review}
+\author{Nan Du}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In this short review, I followed the development of planner in the satisficing track in the International Planning Competition \cite{coles2012survey}, and focusing on state-space search.
+\end{abstract}
+
+\section{Introduction}
+
+One of the pioneer work in the state space search is \textbf{Heuristic Search Planner} (HSP) and its family developed by Bonet and Geffner\cite{bonet1999HSP}. Unlike other heuristic method using for puzzle sovling at that time, the HSP automatically extract heuristics from representations of the problem. The main idea is trying to find a good estimate of the optimal value function in relaxed problems. In original HSP, to find the approximation, the measures of the paths to the goal need to recalculate for every new state. So a backward search version was developed and achieve much faster speed.\\
+
+In the competition in 2000, \textbf{FF} \cite{hoffmann2001ff} outperform all other fully automatic systems. Like HSP, FF will ignore delete list to get an estimation of the goal distance. Without assume all facts are independent, FF adopt techniques like hill-climbing, systematic search, and pruning. FF used relaxed GRAPHPLAN as its basic heuristics. At each state, relaxed GRAPHPLAN will provide the estimation of goal distance, with a set of nodes seems to be promising. The search algorithm will try to find a best solution or return it failed. With the help of hill-climbing, at each iteration, the breadth first search can find a promising state with limited depth. And pruning can further reduce search space. So in the 2000 competition, FF is faster than several other state-of-the-art planners.\\
+
+Fast Downward \cite{helmert2006fastdownward} followed the footsteps of HSP and FF. It won the 4th International Planning Competition at ICAPS 2004. Fast Downward algorithm use progression search strategy, like HSP and FF. In Fast Downward, the PDDL representation was converted to another representation \textit{mutil-valued planning tasks}. This process can help to make many implicit constraint become explicit. \textit{Causal Graph Heuristic} is the key method to find heuristic in Fast Downward by hierarchical decompose the planning tasks. Besides the winning of the 4th IPC, it also performs well on several benchmark dataset.
+
+Those three algorithms are milestones on state search problem. Many state-of-the-art algorithms, such as LAMA \cite{richter2010lama}, was developed from the variation of such algorithms.
+
+\bibliographystyle{plain}
+\bibliography{research_review}
+
+
+\end{document}
